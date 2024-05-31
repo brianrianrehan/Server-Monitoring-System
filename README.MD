@@ -1,5 +1,3 @@
-Sure, here's the README.md file written in English:
-
 ```markdown
 # Server Monitoring System
 
@@ -57,5 +55,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Project Link: [https://github.com/brianrianrehan/systeminformationserver](https://github.com/username/server-monitoring)
 ```
-
-Make sure to replace placeholders like `username` with relevant information for your project, and adjust the installation instructions as needed. Also, be sure to fill out the contact section with relevant information.
