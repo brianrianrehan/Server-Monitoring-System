@@ -1,4 +1,4 @@
-```markdown
+
 # Server Monitoring System
 
 Server Monitoring System is a simple application that monitors server system information in real-time using Node.js, Express, WebSocket, and Systeminformation.
@@ -54,4 +54,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 
 Project Link: [https://github.com/brianrianrehan/systeminformationserver](https://github.com/username/server-monitoring)
-```
+
