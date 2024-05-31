@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Monitor</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-5">
+                <div class="card text-white bg-dark border-secondary">
+                    <div class="card-header text-center">Server Info</div>
+                    <div class="card-body text-secondary">
+                        <h6 class="text-light">Uptime: <span class="text-light" id="viewuptime">-</span></h6>
+                        <h6 class="text-light">OS: <span class="text-light" id="viewos">-</span></h6>
+                        <h6 class="text-light">CPU: <span class="text-light" id="viewcpu">-</span></h6>
+                        <h6 class="text-light">RAM: <span class="text-light" id="viewram">-</span></h6>
+                        <h6 class="text-light">Disk: <span class="text-light" id="viewdisk">-</span></h6>
+                        <h6 class="text-light">CPU Load: <span class="text-light" id="viewcpuload">-</span></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:3000');
+
+        function formatUptime(seconds) {
+            const days = Math.floor(seconds / (3600 * 24));
+            seconds -= days * 3600 * 24;
+            const hrs = Math.floor(seconds / 3600);
+            seconds -= hrs * 3600;
+            const mins = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60); // Membulatkan detik ke bilangan bulat
+            return `${days} hari ${hrs} jam ${mins} menit ${seconds} detik`;
+        }
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            document.getElementById('viewuptime').textContent = formatUptime(data.os.uptime);
+            document.getElementById('viewos').textContent = `${data.os.distro} (${data.os.release})`;
+            document.getElementById('viewcpu').textContent = `${data.cpu.manufacturer} ${data.cpu.brand} @ ${data.cpu.speed} GHz`; // Menampilkan informasi CPU
+            document.getElementById('viewram').textContent = `${(data.memory.used / (1024 * 1024 * 1024)).toFixed(2)} GB / ${(data.memory.total / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+            document.getElementById('viewdisk').textContent = `${(data.disk.totalUsed / (1024 * 1024 * 1024)).toFixed(2)} GB / ${(data.disk.totalSize / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+            document.getElementById('viewcpuload').textContent = `${data.currentLoad.currentLoad.toFixed(2)}%`; // Menampilkan informasi penggunaan CPU saat ini
+        };
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+    </script>
+</body>
+</html>
